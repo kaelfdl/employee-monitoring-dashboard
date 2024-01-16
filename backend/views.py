@@ -52,4 +52,3 @@ def register_view(request):
 def logout_view(request):
     logout(request)
     return Response({"isAuthenticated": request.user.is_authenticated}, status=status.HTTP_200_OK)
-    # return Response("{} logged out".format(request.user.username))
