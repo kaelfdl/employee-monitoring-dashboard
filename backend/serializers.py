@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User
 from rest_framework import serializers
 from backend.models import Employee
 
@@ -6,9 +6,9 @@ from backend.models import Employee
 class UserSerializer(serializers.ModelSerializer):
     class Meta(object):
         model = User
-        fields = ['username', 'first_name', 'last_name', 'email']
+        fields = ['id', 'username', 'first_name', 'last_name', 'email']
 
 class EmployeeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Employee
-        fields = ['first_name', 'last_name','is_online']
+        fields = ['id', 'first_name', 'last_name','is_online']

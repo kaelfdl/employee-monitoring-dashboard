@@ -29,6 +29,7 @@ def login_view(request):
     user = authenticate(username=request.data['username'], password=request.data['password'])
     if not user:
         return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
+    login(request, user)
     serializer = UserSerializer(user)
     return Response(data=serializer.data, status=status.HTTP_200_OK)
 
