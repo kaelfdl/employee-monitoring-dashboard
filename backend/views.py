@@ -24,6 +24,8 @@ class EmployeeViewSet(viewsets.ModelViewSet):
 
 # Login user
 @api_view(['POST'])
+@authentication_classes([])
+@permission_classes([])
 def login_user(request):
     """
     Login a user
@@ -33,10 +35,12 @@ def login_user(request):
         return Response({"detail": "Not found."}, status=status.HTTP_404_NOT_FOUND)
     login(request, user)
     serializer = UserSerializer(user)
-    return Response(data=serializer.data, status=status.HTTP_200_OK)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 # Register user
 @api_view(['POST'])
+@authentication_classes([])
+@permission_classes([])
 def register_user(request):
     """
     Register a user
@@ -48,13 +52,13 @@ def register_user(request):
         user.set_password(request.data['password'])
         user.save()
         login(request, user)
-        return Response(data=serializer.data, status=status.HTTP_200_OK)
-    return Response(serializer.errors, status=status.HTTP_200_OK)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # Logout user
-@api_view(['GET'])
-@authentication_classes([SessionAuthentication, BasicAuthentication])
-@permission_classes([IsAuthenticated])
+@api_view(['POST'])
+@authentication_classes([])
+@permission_classes([])
 def logout_user(request):
     """
     Logout a user
@@ -62,11 +66,19 @@ def logout_user(request):
     logout(request)
     return Response({"isAuthenticated": request.user.is_authenticated}, status=status.HTTP_200_OK)
 
+# Retrieve user
+@api_view(['GET'])
+@authentication_classes([SessionAuthentication, BasicAuthentication])
+@permission_classes([IsAuthenticated])
+def retrieve_user(request):
+    serializer = UserSerializer(request.user)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
 
 
 @api_view(['GET', 'POST'])
-@authentication_classes([SessionAuthentication, BasicAuthentication])
-@permission_classes([IsAuthenticated])
+# @authentication_classes([SessionAuthentication, BasicAuthentication])
+# @permission_classes([IsAuthenticated])
 def employee_list(request):
     """
     List all employees, or create a new employee

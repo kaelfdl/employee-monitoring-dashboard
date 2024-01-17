@@ -23,9 +23,11 @@ function App() {
   useEffect(() => {
     client.get("/user/")
     .then((res) => {
+      console.log(res)
       setCurrentUser(true);
     })
     .catch((res) => {
+      console.log(res)
       setCurrentUser(false);
     }, [])
   })
