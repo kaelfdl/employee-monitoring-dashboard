@@ -1,17 +1,10 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Container, Navbar, Form, Button} from 'react-bootstrap';
 
-axios.defaults.xsrfCookieName = 'csrftoken';
-axios.defaults.xsrfHeaderName = 'X-CSRFToken';
-axios.defaults.withCredentials = true;
 
-const client = axios.create({
-  baseURL: "http://127.0.0.1:8000"
-});
 
-function LoginPage() {
+function LoginPage({client}) {
   const [currentUser, setCurrentUser] = useState();
   const [registrationToggle, setRegistrationToggle] = useState(false);
   const [email, setEmail] = useState('');
