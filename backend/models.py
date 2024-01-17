@@ -5,6 +5,6 @@ from django.contrib.auth.models import User
 # Employee Model
 class Employee(models.Model):
     created = models.DateTimeField(auto_now_add=True)
-    first_name = models.CharField(max_length=200, null=True)
-    last_name = models.CharField(max_length=200, null=True)
-    is_online = models.BooleanField()
+    first_name = models.CharField(max_length=200, default='')
+    last_name = models.CharField(max_length=200, default='')
+    is_online = models.BooleanField(default=False)
