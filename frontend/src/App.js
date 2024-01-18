@@ -18,8 +18,8 @@ function App() {
   const [currentUser, setCurrentUser] = useState();
   return (
     <div className='App'>
-    <LoginPage client={client} currentUser={currentUser} setCurrentUser={setCurrentUser}/>
-    <EmployeeTable client={client} currentUser={currentUser}/>
+    <LoginPage client={client}/>
+    <EmployeeTable client={client}/>
     </div>
   )
 }
