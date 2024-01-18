@@ -14,11 +14,11 @@ const client = axios.create({
 
 function App() {
 
-
   const [currentUser, setCurrentUser] = useState();
+
   return (
     <div className='App'>
-    <LoginPage client={client}/>
+    <LoginPage client={client} currentUser={currentUser} setCurrentUser={setCurrentUser}/>
     <EmployeeTable client={client}/>
     </div>
   )
