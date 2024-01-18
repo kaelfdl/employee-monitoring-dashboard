@@ -77,8 +77,8 @@ def retrieve_user(request):
 
 
 @api_view(['GET', 'POST'])
-# @authentication_classes([SessionAuthentication, BasicAuthentication])
-# @permission_classes([IsAuthenticated])
+@authentication_classes([SessionAuthentication, BasicAuthentication])
+@permission_classes([IsAuthenticated])
 def employee_list(request):
     """
     List all employees, or create a new employee

@@ -1,4 +1,5 @@
 import './App.css';
+import { useState } from 'react';
 import axios from 'axios';
 import LoginPage from './components/LoginPage';
 import EmployeeTable from './components/EmployeeTable';
@@ -13,10 +14,12 @@ const client = axios.create({
 
 function App() {
 
+
+  const [currentUser, setCurrentUser] = useState();
   return (
     <div className='App'>
-    <LoginPage client={client}/>
-    <EmployeeTable client={client}/>
+    <LoginPage client={client} currentUser={currentUser} setCurrentUser={setCurrentUser}/>
+    <EmployeeTable client={client} currentUser={currentUser}/>
     </div>
   )
 }

@@ -1,18 +1,23 @@
 import React, { useState, useEffect} from 'react';
 import { Table } from 'react-bootstrap';
 
-function EmployeeTable({client}) {
-    const [message, setMessage] = useState([]);
+function EmployeeTable({client, currentUser}) {
+    const [employeeData, setEmployeeData] = useState([]);
 
     useEffect(() => {
+        if(currentUser)
+        {
+
         client.get('/employees/')
         .then(response => {
-            setMessage(response.data)
+            setEmployeeData(response.data);
         })
         .catch(error => {
             console.log(error);
+            setEmployeeData([]);
         });
-    }, []);
+        }
+    }, [currentUser]);
 
     return (
         <div>
@@ -26,12 +31,12 @@ function EmployeeTable({client}) {
                     </tr>
                 </thead>
                 <tbody>
-                    {message.map((data) => {
+                    {employeeData.map((data) => {
                         return (
                             <tr>
-                                <td>{data.id}</td>
-                                <td>{data.first_name}</td>
-                                <td>{data.last_name}</td>
+                                <td key={data.id}>{data.id}</td>
+                                <td key={data.first_name}>{data.first_name}</td>
+                                <td key={data.last_name}>{data.last_name}</td>
                             </tr>
                         )
                     })}
