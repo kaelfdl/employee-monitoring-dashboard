@@ -1,7 +1,7 @@
 import React, { useState, useEffect} from 'react';
 import { Table } from 'react-bootstrap';
 
-function EmployeeTable({client}) {
+function EmployeeTable({client, currentUser}) {
     const [employeeData, setEmployeeData] = useState([]);
 
     useEffect(() => {
@@ -13,7 +13,7 @@ function EmployeeTable({client}) {
             console.log(error);
             setEmployeeData([]);
         });
-    }, []);
+    }, [currentUser]);
 
     return (
         <div>

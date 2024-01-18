@@ -19,7 +19,7 @@ function App() {
   return (
     <div className='App'>
     <LoginPage client={client} currentUser={currentUser} setCurrentUser={setCurrentUser}/>
-    <EmployeeTable client={client}/>
+    <EmployeeTable client={client} currentUser={currentUser}/>
     </div>
   )
 }
