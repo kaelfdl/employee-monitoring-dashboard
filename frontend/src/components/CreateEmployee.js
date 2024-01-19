@@ -1,19 +1,24 @@
 import { useState } from 'react';
-import { Container, Navbar, Form, Button, InputGroup} from 'react-bootstrap';
+import { Form, Button, InputGroup} from 'react-bootstrap';
 
-function CreateEmployee({client}) {
+function CreateEmployee({client, setCreateEmployeeToggle}) {
 
 const [firstName, setFirstName] = useState('');
 const [lastName, setLastName] = useState('');
 
     function submitCreateEmployee(e) {
         e.preventDefault();
+        console.log(client)
         client.post('/employees/', 
         {
             first_name: firstName,
             last_name: lastName,
         })
         .then((res) => console.log('ok'))
+        .catch((error) => console.log(error))
+    }
+    function handleCancelAddEmployee(){
+        setCreateEmployeeToggle(false);
     }
     return (
         <div>
@@ -46,6 +51,7 @@ const [lastName, setLastName] = useState('');
              <Button variant="primary" type="submit">
               Submit
             </Button>
+            <Button variant="danger" onClick={handleCancelAddEmployee}>Cancel</Button>
           </Form>
     </div>
 

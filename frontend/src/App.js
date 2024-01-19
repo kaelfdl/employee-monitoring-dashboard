@@ -22,11 +22,9 @@ function App() {
   return (
     <div className='App'>
     <LoginPage client={client} currentUser={currentUser} setCurrentUser={setCurrentUser}/>
-    <EmployeeTable client={client} currentUser={currentUser} createEmployeeToggle={createEmployeeToggle} setCreateEmployeeToggle={setCreateEmployeeToggle}/>
+    {currentUser ? <EmployeeTable client={client} currentUser={currentUser} createEmployeeToggle={createEmployeeToggle} setCreateEmployeeToggle={setCreateEmployeeToggle}/> : null}
     {
-      createEmployeeToggle ? 
-    <CreateEmployee /> :
-    null
+      createEmployeeToggle ?  <CreateEmployee client={client} setCreateEmployeeToggle={setCreateEmployeeToggle}/> : null
     }
     </div>
   )
