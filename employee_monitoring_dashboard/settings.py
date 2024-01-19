@@ -47,6 +47,7 @@ CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:3000']
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -56,8 +57,18 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     "corsheaders",
+    "channels",
     'backend'
 ]
+
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
+}
+
+ASGI_APPLICATION = 'employee_monitoring_dashboard.asgi.application'
 
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",

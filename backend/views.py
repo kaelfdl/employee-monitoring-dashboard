@@ -59,8 +59,8 @@ def register_user(request):
 
 # Logout user
 @api_view(['POST'])
-@authentication_classes([])
-@permission_classes([])
+@authentication_classes([SessionAuthentication])
+@permission_classes([IsAuthenticated])
 def logout_user(request):
     """
     Logout a user
