@@ -17,12 +17,17 @@ const client = axios.create({
 function App() {
 
   const [currentUser, setCurrentUser] = useState();
+  const [createEmployeeToggle, setCreateEmployeeToggle] = useState(false);
 
   return (
     <div className='App'>
     <LoginPage client={client} currentUser={currentUser} setCurrentUser={setCurrentUser}/>
-    <CreateEmployee client={client}/>
-    <EmployeeTable client={client} currentUser={currentUser}/>
+    <EmployeeTable client={client} currentUser={currentUser} createEmployeeToggle={createEmployeeToggle} setCreateEmployeeToggle={setCreateEmployeeToggle}/>
+    {
+      createEmployeeToggle ? 
+    <CreateEmployee /> :
+    null
+    }
     </div>
   )
 }
