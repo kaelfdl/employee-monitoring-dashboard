@@ -39,8 +39,8 @@ def login_user(request):
 
 # Register user
 @api_view(['POST'])
-@authentication_classes([])
-@permission_classes([])
+@authentication_classes([SessionAuthentication])
+@permission_classes([IsAuthenticated])
 def register_user(request):
     """
     Register a user
@@ -68,7 +68,7 @@ def logout_user(request):
 
 # Retrieve user
 @api_view(['GET'])
-@authentication_classes([SessionAuthentication, BasicAuthentication])
+@authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticated])
 def retrieve_user(request):
     serializer = UserSerializer(request.user)
@@ -77,7 +77,7 @@ def retrieve_user(request):
 
 
 @api_view(['GET', 'POST'])
-@authentication_classes([SessionAuthentication, BasicAuthentication])
+@authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticated])
 def employee_list(request):
     """
@@ -97,7 +97,7 @@ def employee_list(request):
 
 
 @api_view(['GET', 'PUT', 'DELETE'])
-@authentication_classes([SessionAuthentication, BasicAuthentication])
+@authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticated])
 def employee_detail(request, pk):
     """
