@@ -9,6 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'first_name', 'last_name', 'email']
 
 class EmployeeSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username')
     class Meta:
         model = Employee
-        fields = ['id', 'first_name', 'last_name','is_online']
+        fields = ['username', 'first_name', 'last_name', 'email','is_online']

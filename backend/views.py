@@ -39,8 +39,8 @@ def login_user(request):
 
 # Register user
 @api_view(['POST'])
-@authentication_classes([SessionAuthentication])
-@permission_classes([IsAuthenticated])
+@authentication_classes([])
+@permission_classes([])
 def register_user(request):
     """
     Register a user
@@ -51,8 +51,10 @@ def register_user(request):
         user = User.objects.get(username=request.data['username'])
         user.set_password(request.data['password'])
         user.save()
+        employee = Employee.objects.create(user=user)
+        employee_serializer = EmployeeSerializer(employee)
         login(request, user)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(employee_serializer.data, status=status.HTTP_200_OK)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # Logout user
