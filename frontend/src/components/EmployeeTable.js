@@ -42,7 +42,9 @@ function EmployeeTable({client, currentUser, createEmployeeToggle, setCreateEmpl
                     })}
                  </tbody>
             </Table>
-            <Button variant="success" onClick={handleAddEmployee}>Add</Button>
+            {
+                !createEmployeeToggle ? <Button variant="success" onClick={handleAddEmployee}>Add</Button> : null
+            }
         </div>
     );
 }
