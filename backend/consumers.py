@@ -6,22 +6,26 @@ from django.contrib.auth.models import User
 from backend.models import Employee
 
 class AppConsumer(AsyncWebsocketConsumer):
+    """
+    Websocket consumer to handle websocket communication
+    """
     async def connect(self):
         self.room_group_name = 'employees'
 
-        self.user = self.scope['user']
-        await self.set_online_status(True)
-        self.employee = await self.get_employee()
-
-
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
 
-
         await self.accept()
-        await self.send(text_data=json.dumps({
-            'type': 'connection established',
-            'message': self.employee.is_online
-        }))
+        self.user = self.scope['user']
+        print(self.user)
+        if self.user:
+            await self.set_online_status(True)
+            self.employee = await self.get_employee()
+            if self.employee:
+                await self.send(text_data=json.dumps({
+                    'type': 'connection established',
+                    'message': self.employee.is_online
+                }))
+
 
     async def disconnect(self, close_code):
         await self.set_online_status(False)
@@ -37,6 +41,19 @@ class AppConsumer(AsyncWebsocketConsumer):
                 'message': message
             }
         )
+        if (message == 'logout'):
+            await self.set_online_status(False)
+        elif (message == 'login'):
+            self.user = self.scope['user']
+            print(self.user)
+            if self.user:
+                await self.set_online_status(True)
+                self.employee = await self.get_employee()
+                if self.employee:
+                    await self.send(text_data=json.dumps({
+                        'type': 'connection established',
+                        'message': self.employee.is_online
+                    }))
     
     async def client_message(self, event):
         message = event['message']
@@ -46,9 +63,13 @@ class AppConsumer(AsyncWebsocketConsumer):
 
     @database_sync_to_async
     def get_employee(self):
-        return Employee.objects.get(user=self.scope['user'])
+        try:
+            return Employee.objects.get(user=self.scope['user'])
+        except:
+            return None
 
     async def set_online_status(self, status):
         employee = await self.get_employee()
-        employee.is_online = status
-        await database_sync_to_async(employee.save)()
+        if employee:
+            employee.is_online = status
+            await database_sync_to_async(employee.save)()

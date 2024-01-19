@@ -25,8 +25,10 @@ function EmployeeTable({client, currentUser, createEmployeeToggle, setCreateEmpl
                 <thead>
                     <tr>
                     <th>Id</th>
+                    <th>Username</th>
                     <th>First Name</th>
                     <th>Last Name</th>
+                    <th>Online</th>
                     {/* <th>Username</th> */}
                     </tr>
                 </thead>
@@ -35,8 +37,10 @@ function EmployeeTable({client, currentUser, createEmployeeToggle, setCreateEmpl
                         return (
                             <tr>
                                 <td key={data.id}>{data.id}</td>
+                                <td key={data.username}>{data.username}</td>
                                 <td key={data.first_name}>{data.first_name}</td>
                                 <td key={data.last_name}>{data.last_name}</td>
+                                <td key={data.is_online} class={data.is_online ? 'table-success' : 'table-danger'}>{data.is_online ? "Online" : "Offline"}</td>
                             </tr>
                         )
                     })}

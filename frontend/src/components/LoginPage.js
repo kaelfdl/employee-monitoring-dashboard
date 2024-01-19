@@ -4,7 +4,7 @@ import { Container, Navbar, Form, Button} from 'react-bootstrap';
 
 
 
-function LoginPage({client, currentUser, setCurrentUser}) {
+function LoginPage({client, currentUser, setCurrentUser, sendMessage}) {
   const [registrationToggle, setRegistrationToggle] = useState(false);
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
@@ -59,6 +59,7 @@ function LoginPage({client, currentUser, setCurrentUser}) {
     )
     .then((res) => {
       setCurrentUser(true);
+      sendMessage('login')
     });
   }
 
@@ -70,6 +71,7 @@ function LoginPage({client, currentUser, setCurrentUser}) {
     )
     .then((res) => {
       setCurrentUser(false);
+      sendMessage('logout')
     })
   }
 
