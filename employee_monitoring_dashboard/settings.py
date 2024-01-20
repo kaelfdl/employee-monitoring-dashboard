@@ -31,7 +31,7 @@ else:
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('DJANGO_SECRET_KEY')
+SECRET_KEY = 'django-insecure-8qixiu1o#yex4-enpfm72ibj5xq4itmm@bjv48!9$m)7cs6$hi'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
