@@ -49,8 +49,6 @@ def register_user(request):
     if serializer.is_valid():
         serializer.save()
         user = User.objects.get(username=request.data['username'])
-        user.set_password(request.data['password'])
-        user.save()
         employee = Employee.objects.create(user=user)
         employee_serializer = EmployeeSerializer(employee)
         login(request, user)

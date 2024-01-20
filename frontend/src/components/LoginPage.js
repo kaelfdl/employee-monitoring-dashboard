@@ -1,19 +1,22 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
-import { Container, Navbar, Form, Button} from 'react-bootstrap';
+import { Alert, FloatingLabel, InputGroup, Container, Navbar, Form, Button} from 'react-bootstrap';
 
 
 
-function LoginPage({client, currentUser, setCurrentUser, sendMessage}) {
+function LoginPage({client, currentUser, setCurrentUser, sendMessage, currentUsername, setCurrentUsername}) {
   const [registrationToggle, setRegistrationToggle] = useState(false);
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [password, setPassword] = useState('');
+  const [password2, setPassword2] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     client.get("/user/")
     .then((res) => {
-      console.log(res)
       setCurrentUser(true);
     })
     .catch((res) => {
@@ -40,12 +43,23 @@ function LoginPage({client, currentUser, setCurrentUser, sendMessage}) {
       {
         email: email,
         username: username,
-        password: password
+        first_name: firstName,
+        last_name: lastName,
+        password: password,
+        password2: password2
       }
     )
     .then((res) => {
-      submitLogin(e)
-    });
+
+      sendMessage('login')
+      setCurrentUser(true);
+      setCurrentUsername(res.data['username']);
+    })
+    .catch((error) => {
+      console.log(error)
+      setErrorMessage(error)
+    })
+
   }
 
   function submitLogin(e) {
@@ -58,16 +72,21 @@ function LoginPage({client, currentUser, setCurrentUser, sendMessage}) {
       }
     )
     .then((res) => {
-      setCurrentUser(true);
+      console.log(res.data)
       sendMessage('login')
-    });
+      setCurrentUser(true);
+      setCurrentUsername(res.data['username']);
+    })
+    .catch((error) => {
+      console.log(error)
+      setErrorMessage(error)
+    })
   }
 
   function submitLogout(e) {
     e.preventDefault();
     client.post(
-      "/logout/",
-      {withCredentials: true}
+      "/logout/"
     )
     .then((res) => {
       setCurrentUser(false);
@@ -75,13 +94,14 @@ function LoginPage({client, currentUser, setCurrentUser, sendMessage}) {
     })
   }
 
+
   if (currentUser)
   {
     return (
       <div>
       <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
-        <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
+        <Navbar.Brand href="#home">Employee Monitoring Dashboard</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Navbar.Text>
@@ -93,7 +113,7 @@ function LoginPage({client, currentUser, setCurrentUser, sendMessage}) {
       </Container>
     </Navbar>
     <div className='center'>
-      <h2>You're logged in!</h2>
+      <h2>Hello {currentUsername}!</h2>
     </div>
       </div>
     );
@@ -104,9 +124,9 @@ function LoginPage({client, currentUser, setCurrentUser, sendMessage}) {
 <div>
       <Navbar expand="lg" className="bg-body-tertiary">
       <Container>
-        <Navbar.Brand href="#home">React-Bootstrap</Navbar.Brand>
+        <Navbar.Brand href="#home">Employee Monitoring Dashboard</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
+        <Navbar.Collapse id="basic-navbar-nav"className='justify-content-end' >
           <Navbar.Text>
               <Button id="form_btn" onClick={update_form_btn} variant="light">Register</Button>
           </Navbar.Text>
@@ -118,21 +138,26 @@ function LoginPage({client, currentUser, setCurrentUser, sendMessage}) {
       registrationToggle ? (
         <div className='center'>
           <Form onSubmit={e => submitRegistration(e)}>
-            <Form.Group className="mb-3" controlId="formBasicUsername">
-              <Form.Label>Username</Form.Label>
-              <Form.Control type="text" placeholder="Enter username" value={username} onChange={e => setUsername(e.target.value)} />
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicEmail">
-              <Form.Label>Email</Form.Label>
-              <Form.Control type="text" placeholder="Enter email" value={email} onChange={e => setEmail(e.target.value)} />
-              <Form.Text className="text-muted">
-                We'll never share your email with anyone else.
-              </Form.Text>
-            </Form.Group>
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>Password</Form.Label>
-              <Form.Control type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
-            </Form.Group>
+        <FloatingLabel controlId="floatingInputUsername" label="Username" className="mb-3">
+              <Form.Control required type="text" placeholder="Enter username" value={username} onChange={e => setUsername(e.target.value)} />
+      </FloatingLabel>
+        <FloatingLabel controlId="floatingInputEmail" label="Email" className="mb-3">
+              <Form.Control required type="text" placeholder="Enter email" value={email} onChange={e => setEmail(e.target.value)} />
+      </FloatingLabel>
+        <FloatingLabel controlId="floatingInputFirstName" label="First Name" className="mb-3">
+              <Form.Control required type="text" placeholder="Enter first name" value={firstName} onChange={e => setFirstName(e.target.value)} />
+      </FloatingLabel>
+        <FloatingLabel controlId="floatingInputLastName" label="Last Name" className="mb-3">
+              <Form.Control required type="text" placeholder="Enter email" value={lastName} onChange={e => setLastName(e.target.value)} />
+      </FloatingLabel>
+        <FloatingLabel controlId="floatingInputPassword" label="Password" className="mb-3">
+              <Form.Control required type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
+      </FloatingLabel>
+        <FloatingLabel controlId="floatingInputRe-TypePassword" label="Re-type Password" className="mb-3">
+              <Form.Control required type="password" placeholder="Re-type Password" value={password2} onChange={e => setPassword2(e.target.value)} />
+      </FloatingLabel>
+
+          {errorMessage ? <Alert key='danger' variant='danger'>Please fill the required fields</Alert> : null}
              <Button variant="primary" type="submit">
               Submit
             </Button>
@@ -141,16 +166,16 @@ function LoginPage({client, currentUser, setCurrentUser, sendMessage}) {
       ) : (
         <div className='center'>
           <Form onSubmit={e => submitLogin(e)}>
-            <Form.Group className="mb-3" controlId="formBasicUsername">
-              <Form.Label>Username</Form.Label>
-              <Form.Control type="text" placeholder="Enter username" value={username} onChange={e => setUsername(e.target.value)} />
-             </Form.Group>
+        <FloatingLabel controlId="floatingInputUsername" label="Username" className="mb-3">
+              <Form.Control required type="text" placeholder="Enter username" value={username} onChange={e => setUsername(e.target.value)} />
+      </FloatingLabel>
 
-            <Form.Group className="mb-3" controlId="formBasicPassword">
-              <Form.Label>Password</Form.Label>
-              <Form.Control type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
-            </Form.Group>
-            <Button variant="primary" type="submit">
+        <FloatingLabel controlId="floatingInputPassword" label="Password" className="mb-3">
+              <Form.Control required type="password" placeholder="Password" value={password} onChange={e => setPassword(e.target.value)} />
+      </FloatingLabel>
+
+          {errorMessage ? <Alert key='danger' variant='danger'>Username or password is invalid</Alert> : null}
+             <Button variant="primary" type="submit">
               Submit
             </Button>
           </Form>

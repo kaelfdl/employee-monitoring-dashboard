@@ -1,6 +1,7 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from channels.db import database_sync_to_async
+from channels.auth import login, logout
 from asgiref.sync import async_to_sync
 from django.contrib.auth.models import User
 from backend.models import Employee
@@ -16,7 +17,6 @@ class AppConsumer(AsyncWebsocketConsumer):
 
         await self.accept()
         self.user = self.scope['user']
-        print(self.user)
         if self.user:
             await self.set_online_status(True)
             self.employee = await self.get_employee()
@@ -31,6 +31,7 @@ class AppConsumer(AsyncWebsocketConsumer):
         await self.set_online_status(False)
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
 
+
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         message = text_data_json['message']
@@ -43,17 +44,24 @@ class AppConsumer(AsyncWebsocketConsumer):
         )
         if (message == 'logout'):
             await self.set_online_status(False)
+            # await logout(self.scope)
+            # await database_sync_to_async(self.scope["session"].save)()
         elif (message == 'login'):
             self.user = self.scope['user']
-            print(self.user)
+            # await login(self.scope, self.user)
+            # await database_sync_to_async(self.scope["session"].save)()
+            self.employee = await self.get_employee()
             if self.user:
                 await self.set_online_status(True)
-                self.employee = await self.get_employee()
+                print(self.user)
                 if self.employee:
-                    await self.send(text_data=json.dumps({
-                        'type': 'connection established',
-                        'message': self.employee.is_online
-                    }))
+                    await self.channel_layer.group_send(
+                        self.room_group_name,
+                        {
+                            'type': 'client_message',
+                            'message': self.employee.is_online
+                        }
+                    )
     
     async def client_message(self, event):
         message = event['message']

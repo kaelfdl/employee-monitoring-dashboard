@@ -21,13 +21,16 @@ const appSocket = new WebSocket('ws://' + '127.0.0.1:8000' + '/ws/socket-server/
 function App() {
 
   const [currentUser, setCurrentUser] = useState();
+  const [currentUsername, setCurrentUsername] = useState('');
   const [createEmployeeToggle, setCreateEmployeeToggle] = useState(false);
+  const [serverMessage, setServerMessage] = useState('');
 
 
   appSocket.onmessage = function(e) {
       const data = JSON.parse(e.data);
       const message = data['message'];
       console.log(message);
+      setServerMessage(message);
   };
 
   appSocket.onclose = function(e) {
@@ -43,8 +46,8 @@ function App() {
 
   return (
     <div className='App'>
-    <LoginPage client={client} currentUser={currentUser} setCurrentUser={setCurrentUser} sendMessage={sendMessage}/>
-    {currentUser ? <EmployeeTable client={client} currentUser={currentUser} createEmployeeToggle={createEmployeeToggle} setCreateEmployeeToggle={setCreateEmployeeToggle}/> : null}
+    <LoginPage client={client} currentUser={currentUser} setCurrentUser={setCurrentUser} sendMessage={sendMessage} currentUsername={currentUsername} setCurrentUsername={setCurrentUsername}/>
+    {currentUser ? <EmployeeTable client={client} currentUser={currentUser} createEmployeeToggle={createEmployeeToggle} setCreateEmployeeToggle={setCreateEmployeeToggle} serverMessage={serverMessage}/> : null}
     {
       createEmployeeToggle ?  <CreateEmployee client={client} setCreateEmployeeToggle={setCreateEmployeeToggle}/> : null
     }

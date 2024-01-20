@@ -1,7 +1,7 @@
 import React, { useState, useEffect} from 'react';
 import { Button, Table } from 'react-bootstrap';
 
-function EmployeeTable({client, currentUser, createEmployeeToggle, setCreateEmployeeToggle}) {
+function EmployeeTable({client, currentUser, createEmployeeToggle, setCreateEmployeeToggle, serverMessage}) {
     const [employeeData, setEmployeeData] = useState([]);
 
     useEffect(() => {
@@ -13,7 +13,7 @@ function EmployeeTable({client, currentUser, createEmployeeToggle, setCreateEmpl
             console.log(error);
             setEmployeeData([]);
         });
-    }, [currentUser]);
+    }, [serverMessage]);
 
     function handleAddEmployee(){
         createEmployeeToggle ? setCreateEmployeeToggle(false) : setCreateEmployeeToggle(true)
