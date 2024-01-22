@@ -18,6 +18,7 @@ function LoginPage({client, currentUser, setCurrentUser, sendMessage, currentUse
     client.get("/user/")
     .then((res) => {
       setCurrentUser(true);
+      setCurrentUsername(res.data['username']);
     })
     .catch((res) => {
       console.log(res)
