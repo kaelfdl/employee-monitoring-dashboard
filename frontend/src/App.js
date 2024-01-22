@@ -3,7 +3,6 @@ import { useState } from 'react';
 import axios from 'axios';
 import LoginPage from './components/LoginPage';
 import EmployeeTable from './components/EmployeeTable';
-import CreateEmployee from './components/CreateEmployee';
 
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -48,9 +47,6 @@ function App() {
     <div className='App'>
     <LoginPage client={client} currentUser={currentUser} setCurrentUser={setCurrentUser} sendMessage={sendMessage} currentUsername={currentUsername} setCurrentUsername={setCurrentUsername}/>
     {currentUser ? <EmployeeTable client={client} currentUser={currentUser} createEmployeeToggle={createEmployeeToggle} setCreateEmployeeToggle={setCreateEmployeeToggle} serverMessage={serverMessage}/> : null}
-    {
-      createEmployeeToggle ?  <CreateEmployee client={client} setCreateEmployeeToggle={setCreateEmployeeToggle}/> : null
-    }
     </div>
   )
 }
