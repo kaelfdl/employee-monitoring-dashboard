@@ -104,7 +104,7 @@ function LoginPage({client, currentUser, setCurrentUser, sendMessage, currentUse
       <Container>
         <Navbar.Brand href="#home">Employee Monitoring Dashboard</Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
+        <Navbar.Collapse id="basic-navbar-nav"className='justify-content-end' >
           <Navbar.Text>
             <form onSubmit={e => submitLogout(e)}>
               <Button type="submit" variant="light">Logout</Button>

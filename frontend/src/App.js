@@ -28,7 +28,6 @@ function App() {
   appSocket.onmessage = function(e) {
       const data = JSON.parse(e.data);
       const message = data['message'];
-      console.log(message);
       setServerMessage(message);
   };
 
